@@ -10,32 +10,31 @@
 
 <body>
 
+    <label>WebSocket: </label>
+    <input id="webSocketConnection" type="text" size="80"
+        value="wss://pvuwhlmm1h.execute-api.eu-west-2.amazonaws.com/dev"><br /><br />
+    <label>User Inbox: </label>
+    <input id="userinbox" type="text" size="80" placeholder="Enter provider channel id"
+        value="userinbox.5e44a6ece1953279782451b8"><br /><br />
+    <label>Provider Channel: </label>
+    <input id="provider" type="text" size="80" placeholder="Enter provider channel id"
+        value="provider.5deb55996b720000450045d7"><br /><br />
+    <label>Facility Channel: </label>
+    <input id="facility" type="text" size="80" placeholder="Enter facility channel id"
+        value="facility.5deb55bd6b720000450045df"><br /><br />
+    <label>Message: </label>
+    <input id="messageInput" type="text" size="80" placeholder="Enter message to send"><br /><br />
+    <button id="connectToWebSocketButton" onclick="connectToWebSocket()">Connect</button> <button id="disconnectButton"
+        onclick="disconnect()">Disconnect</button> <button id="sendMessageButton"
+        onclick="sendMessage()">Send</button><br />
+    <p id="socketState"></p>
+
+    Socket Messages:
+    <p id="messages"></p>
+
 </body>
 
-<label>WebSocket: </label>
-<input id="webSocketConnection" type="text" size="80"
-    value="wss://pvuwhlmm1h.execute-api.eu-west-2.amazonaws.com/dev"><br /><br />
-<label>User Inbox: </label>
-<input id="userinbox" type="text" size="80" placeholder="Enter provider channel id"
-    value="userinbox.5e44a6ece1953279782451b8"><br /><br />
-<label>Provider Channel: </label>
-<input id="provider" type="text" size="80" placeholder="Enter provider channel id"
-    value="provider.5deb55996b720000450045d7"><br /><br />
-<label>Facility Channel: </label>
-<input id="facility" type="text" size="80" placeholder="Enter facility channel id"
-    value="facility.5deb55bd6b720000450045df"><br /><br />
-<label>Message: </label>
-<input id="messageInput" type="text" size="80" placeholder="Enter message to send"><br /><br />
-<button id="connectToWebSocketButton" onclick="connectToWebSocket()">Connect</button> <button id="disconnectButton"
-    onclick="disconnect()">Disconnect</button> <button id="sendMessageButton"
-    onclick="sendMessage()">Send</button><br />
-<p id="socketState"></p>
-
-Socket Messages:
-<p id="messages"></p>
-
 <script>
-
     document.getElementById("disconnectButton").disabled = true;
     document.getElementById("sendMessageButton").disabled = true;
     document.getElementById("socketState").innerHTML = 'Connection Closed';
@@ -43,18 +42,22 @@ Socket Messages:
     var socket = null;
 
     function sendMessage() {
-        payload = { "action": "onMessage", "params": { 
-            "channel": document.getElementById("userinbox").value,
-            "count": document.getElementById("messageInput").value,
-            "event": "USERINBOXSTATUSUPDATED"
-        }};
+        payload = {
+            "action": "onMessage", "params": {
+                "channel": document.getElementById("userinbox").value,
+                "count": document.getElementById("messageInput").value,
+                "event": "USERINBOXSTATUSUPDATED"
+            }
+        };
         socket.send(JSON.stringify(payload));
 
-        payload = { "action": "onMessage", "params": { 
-            "channel": document.getElementById("provider").value,
-            "content": document.getElementById("messageInput").value,
-            "event": "BROADCAST"
-        }};
+        payload = {
+            "action": "onMessage", "params": {
+                "channel": document.getElementById("provider").value,
+                "content": document.getElementById("messageInput").value,
+                "event": "BROADCAST"
+            }
+        };
         socket.send(JSON.stringify(payload));
     }
 
@@ -71,7 +74,7 @@ Socket Messages:
 
             payload = { "action": "onSubscribe", "params": { "channel": document.getElementById("userinbox").value } };
             socket.send(JSON.stringify(payload));
-            payload = { "action": "onSubscribe", "params": {"channel": document.getElementById("provider").value }};
+            payload = { "action": "onSubscribe", "params": { "channel": document.getElementById("provider").value } };
             socket.send(JSON.stringify(payload));
             // payload = { "action": "onSubscribe", "params": {"channel": document.getElementById("facility").value }};
             // socket.send(JSON.stringify(payload));
